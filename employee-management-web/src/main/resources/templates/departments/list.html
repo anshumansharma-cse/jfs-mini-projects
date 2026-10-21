@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Departments</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand"><a href="/dashboard">📋 Employee Management</a></div>
+        <div class="nav-links">
+            <a href="/dashboard">Dashboard</a>
+            <a href="/employees">Employees</a>
+            <a href="/departments" class="active">Departments</a>
+            <span>Welcome, <strong th:text="${#authentication.name}">User</strong></span>
+            <a href="/logout" class="btn btn-sm btn-logout">Logout</a>
+        </div>
+    </nav>
+    <main class="container">
+        <h1>Departments</h1>
+        <div class="toolbar">
+            <a href="/departments/new" class="btn btn-primary">+ Add Department</a>
+        </div>
+        <table class="table">
+            <thead>
+                <tr><th>Name</th><th>Description</th><th>Employees</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+                <tr th:each="dept : ${departments}">
+                    <td th:text="${dept.name}">Dept</td>
+                    <td th:text="${dept.description ?: '-'}">-</td>
+                    <td th:text="${dept.employeeCount}">0</td>
+                    <td class="actions">
+                        <a th:href="@{/departments/{id}/edit(id=${dept.id})}" class="btn btn-sm btn-secondary">Edit</a>
+                        <form th:action="@{/departments/{id}/delete(id=${dept.id})}" method="post" style="display:inline"
+                              onsubmit="return confirm('Delete this department?');">
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${departments == null || departments.size() == 0}">
+                    <td colspan="4">No departments found.</td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>
