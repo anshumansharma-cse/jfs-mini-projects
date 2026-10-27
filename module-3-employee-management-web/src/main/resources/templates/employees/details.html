@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Employee: ' + ${employee.fullName}">Employee Details</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand"><a href="/dashboard">📋 Employee Management</a></div>
+        <div class="nav-links">
+            <a href="/dashboard">Dashboard</a>
+            <a href="/employees" class="active">Employees</a>
+            <a href="/departments">Departments</a>
+            <span>Welcome, <strong th:text="${#authentication.name}">User</strong></span>
+            <a href="/logout" class="btn btn-sm btn-logout">Logout</a>
+        </div>
+    </nav>
+    <main class="container">
+        <h1 th:text="${employee.fullName}">Employee Name</h1>
+        <div class="detail-card">
+            <div class="detail-row"><span class="label">Email:</span><span th:text="${employee.email}">-</span></div>
+            <div class="detail-row"><span class="label">Phone:</span><span th:text="${employee.phone ?: '-'}">-</span></div>
+            <div class="detail-row"><span class="label">Job Title:</span><span th:text="${employee.jobTitle}">-</span></div>
+            <div class="detail-row"><span class="label">Salary:</span><span th:text="${employee.salary != null ? '$' + employee.salary : '-'}">-</span></div>
+            <div class="detail-row"><span class="label">Joining Date:</span><span th:text="${employee.joiningDate != null ? employee.joiningDate : '-'}">-</span></div>
+            <div class="detail-row"><span class="label">Department:</span><span th:text="${employee.department != null ? employee.department.name : '-'}">-</span></div>
+            <div class="detail-row"><span class="label">Status:</span>
+                <span th:class="${employee.active ? 'badge badge-active' : 'badge badge-inactive'}"
+                      th:text="${employee.active ? 'Active' : 'Inactive'}">Active</span>
+            </div>
+        </div>
+        <div class="form-actions">
+            <a th:href="@{/employees/{id}/edit(id=${employee.id})}" class="btn btn-primary">Edit</a>
+            <a href="/employees" class="btn btn-secondary">Back to List</a>
+            <form th:action="@{/employees/{id}/delete(id=${employee.id})}" method="post" style="display:inline"
+                  onsubmit="return confirm('Are you sure you want to delete this employee?');">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+    </main>
+</body>
+</html>
